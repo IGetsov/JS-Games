@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+}
+
+.boxStart{
+    position: relative;
+    height: 200px;
+    width: 200px;
+    border: 1px solid red;
+    background-color: black;
+}
+/* ghost body styling */
+.ghost{
+    position: absolute;
+    height: 100%;
+    width: 80%;
+    top: 0;
+    left: 10%;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: green;
+    z-index: 3;
+}
+/* eyes styling */
+.eyes{
+    position: absolute;
+    display: inline-block;
+    height: 30%;
+    width: 30%;
+    border-radius: 10%;
+    bottom: 45%;
+    background-color: azure;
+}
+/* position left eye 10% from the left border */
+.eyeleft{
+    left: 10%;
+}
+/* position right eye 10% from the right border */
+.eyeright{
+    right: 10%;
+}
+/* eye animation to be updated with JS */
+.eyes:after{
+    position: absolute;
+    bottom: 40%;
+    content: " ";
+    background-color: black;
+    height: 50%;
+    width: 50%;
+    left: 20%;
+    border-radius: 20%;
+}
+/* Pacman body styling */
+.pacman{
+    z-index: 2;
+    position: absolute;
+    height: 80%;
+    width: 80%;
+    top: 10;
+    left: 10%;
+    border-radius: 50%;
+    background-color:#f9da7b;
+}
+/* Pacman eye styling */
+.eye{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #f3f6f4;
+}
+/* Pacman mouth styling */
+.mouth{
+    position: absolute;
+    left: 60%;
+    bottom: 35%;
+    width: 40%;
+    background-color: black;
+    height: 10%;
+}
+/* dot styling */
+.dot{
+    position: absolute;
+    left: 35%;
+    top: 35%;
+    width: 25%;
+    height: 25%;
+    border: 1px solid black;
+    background-color: azure;
+    border-radius: 50%;
+}
+/* superdot styling */
+.superdot{
+    position: absolute;
+    left: 25%;
+    top: 25%;
+    width: 50%;
+    height: 50%;
+    border: 1px solid black;
+    background-color: gold;
+    border-radius: 50%;
+}
+/* wall styling */
+.wall{
+    background-color: cadetblue;
+    width: 100%;
+    height: 100%;
+}
+/* main grid styling */
+.grid{
+    margin: auto;
+    padding-top: 40px;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(10, 100px);
+    grid-template-rows: repeat(10, 100px);
+    cursor: grab;
+    background-color: black;
+    overflow: hidden;
+}
+
+.box{
+    font-size: 3rem;
+    text-align: center;
+    position: relative;
+}
+/* scoreBoard styling */
+.scoreBoard{
+    background-color: black;
+    text-align: center;
+    font-size: 2rem;
+    color: azure;
+    padding: 20px;
+}
