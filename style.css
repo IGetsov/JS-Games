@@ -69,7 +69,7 @@
     width: 20%;
     height: 20%;
     border-radius: 50%;
-    background-color: #f3f6f4;
+    background-color: #1e2c23;
 }
 /* Pacman mouth styling */
 .mouth{
@@ -111,7 +111,7 @@
 /* main grid styling */
 .grid{
     margin: auto;
-    padding-top: 40px;
+    padding-top: 30px;
     justify-content: center;
     display: grid;
     grid-template-columns: repeat(10, 100px);
