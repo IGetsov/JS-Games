@@ -100,7 +100,7 @@ function createSquare(val){
 
     game.grid.append(div);
     myBoard.push(div);
-    div.t = val;
+    div.t = val; // check element type
     div.idVal = myBoard.length;
 }
 
@@ -108,11 +108,19 @@ function createGhost(){
     let newGhost = game.ghost.cloneNode(true);
     newGhost.pos = 12 + ghosts.length;
     newGhost.style.display = 'block';
+    newGhost.counter = 0;
+    newGhost.dx = Math.floor(Math.random()*4);
     // Iterate board list with colors with each newly added ghost
     newGhost.style.backgroundColor = board[ghosts.length];
     newGhost.name = board[ghosts.length] + 'y';
     ghosts.push(newGhost); 
     console.log(newGhost);
+}
+
+// Control ghost movement
+function changeDir(g){
+    g.dx = Math.floor(Math.random()*4);
+    g.counter = (Math.random()*10)+ 2;
 }
 
 function move(){
@@ -122,15 +130,44 @@ function move(){
             // movement of ghosts on screen
             ghosts.forEach((ghost)=>{
                 myBoard[ghost.pos].append(ghost);
+                ghost.counter--;
+                let oldPos = ghost.pos; // original ghost pos
+                if(ghost.counter < 0){
+                    changeDir(ghost);
+                }else{
+                    if(ghost.dx==0){
+                        ghost.pos -=game.size;
+                    }
+                    else if(ghost.dx==1){
+                        ghost.pos += game.size;
+                    }
+                    else if(ghost.dx==2){
+                        ghost.pos += 1;
+                    }
+                    else if(ghost.dx==3){
+                        ghost.pos -= 1;
+                    }
+                }
+                let valGhost = myBoard[ghost.pos]; // future ghost position
+                if(valGhost.t == 1){
+                    ghost.pos=oldPos;
+                    changeDir(ghost);
+                }
+                myBoard[ghost.pos].append(ghost);
             })
 
             // kayboard events
+            
             let tempPos = player.pos;
             if(keys.ArrowRight){
                 player.pos+=1;
+                game.eye.style.left = '20%';
+                game.mouth.style.left = '60%';
             }
             else if(keys.ArrowLeft){
                 player.pos -=1;
+                game.eye.style.left = '60%';
+                game.mouth.style.left = '0%';
             }
             else if(keys.ArrowUp){
                 player.pos -=game.size;
@@ -138,13 +175,29 @@ function move(){
             else if(keys.ArrowDown){
                 player.pos +=game.size;
             }
-            player.cool = player.speed; // set cool off
             let newPos = myBoard[player.pos]; // new position
-            console.log(newPos);
+            if(newPos.t == 1){
+                console.log('wall');
+                player.pos = tempPos;
+            }
+            if(newPos.t == 2){
+                console.log('dot');
+                myBoard[player.pos].innerHTML = '';
+                newPos.t = 0;
+            }
+            if(player.pos != tempPos){
+                // Open / close mouth
+                if(player.tog){
+                    game.mouth.style.height = '30%';
+                    player.tog = false;
+                } else {
+                    game.mouth.style.height = '10%';
+                    player.tog = true;
+                }
+            }
+            player.cool = player.speed; // set cool off
+            console.log(newPos.t);
         }
-        
-        
-        console.log(player.pos);
         myBoard[player.pos].append(game.packman);
         player.play = requestAnimationFrame(move);
     }
