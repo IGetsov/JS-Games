@@ -134,3 +134,11 @@
     color: azure;
     padding: 20px;
 }
+/* Start Button styling */
+.btn {
+    font-size: 2em;
+    width: 50%;
+    display: block;
+    padding: 20px;
+    margin: auto;
+}

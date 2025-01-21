@@ -33,9 +33,12 @@ const player = {
     cool: 0,
     pause: false,
     score: 0,
-    lives: 5
+    lives: 5,
+    gameover: true
 }
 
+const startGame = document.querySelector('.btn'); // select start button
+// element selectors
 document.addEventListener('DOMContentLoaded', ()=>{
     game.grid = document.querySelector('.grid'); // gameBoard
     game.packman = document.querySelector('.pacman'); // pacman
@@ -43,9 +46,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
     game.mouth = document.querySelector('.mouth'); // select pacman mouth
     game.ghost = document.querySelector('.ghost'); // select ghost object
     game.ghost.style.display = 'none';
+    game.packman.style.display = 'none';
     game.score = document.querySelector('.score'); // select game score
     game.lives = document.querySelector('.live'); // select game lives
-    createGame(); // initialize the game board
+    game.grid.style.display = 'none';
    
 })
 
@@ -67,6 +71,8 @@ document.addEventListener('keyup', (e)=>{
     }
 })
 
+startGame.addEventListener('click', starterGame);
+
 
 function createGame(){
     gameBoard.forEach(
@@ -86,14 +92,6 @@ function createGame(){
     }
 }
 
-function gameReset(){
-    console.log('Paused');
-    window.cancelAnimationFrame(player.play);
-    game.inplay = false;
-    player.pause = true;
-    setTimeout(startPos, 3000);
-}
-
 function startPos(){
     player.pause = false;
     let firstStartPos = 84;
@@ -106,6 +104,38 @@ function startPos(){
     })
 }
 
+
+// Game board setup
+function starterGame(){
+    player.score = 0;
+    player.lives = 4;
+    player.gameover = false;
+    createGame(); // initialize the game board
+    updateScore();
+    game.grid.focus();
+    game.grid.style.display = 'grid';
+    startGame.style.display = 'none';
+    game.packman.style.display = 'block';
+}
+
+function endGame(){
+    startGame.style.display = 'block';
+}
+
+function gameReset(){
+    console.log('Paused');
+    window.cancelAnimationFrame(player.play);
+    game.inplay = false;
+    player.pause = true;
+    if(player.lives <=0){
+        player.gameover = true;
+        endGame();
+    }
+    if(!player.gameover){
+        setTimeout(startPos, 3000);
+    }
+}
+
 function startPosPlayer(val){
     if(myBoard[val].t !=1){
         return val
@@ -114,14 +144,16 @@ function startPosPlayer(val){
 }
 
 function updateScore(){
-    if(player.lives ==0){
-        console.log('Game over');
+    if(player.lives <=0){
+        player.gameover = true;
         game.lives.innerHTML = 'GAME OVER'
     }else{
         game.score.innerHTML = `Score : ${player.score}`;
         game.lives.innerHTML = `Lives : ${player.lives}`;
     } 
 }
+
+
 
 function createSquare(val){
     const div = document.createElement('div');
@@ -143,6 +175,15 @@ function createSquare(val){
     div.idVal = myBoard.length;
 }
 
+
+// take an object and return row, col values
+function findDirection(obj){
+    let val = [obj.pos % game.size, Math.ceil(obj.pos / game.ghosts.size)];
+    return val;
+}
+// Enemy control
+
+// Control ghost movement
 function createGhost(){
     let newGhost = game.ghost.cloneNode(true);
     newGhost.pos = 12 + ghosts.length;
@@ -155,12 +196,7 @@ function createGhost(){
     ghosts.push(newGhost); 
     console.log(newGhost);
 }
-// take an object and return row, col values
-function findDirection(obj){
-    let val = [obj.pos % game.size, Math.ceil(obj.pos / game.ghosts.size)];
-    return val;
-}
-// Control ghost movement
+
 function changeDir(gh){
     let gg = findDirection(gh);
     let pp = findDirection(player);
@@ -173,6 +209,7 @@ function changeDir(gh){
     gh.counter = (Math.random()*2)+ 2;
 }
 
+// Main function
 function move(){
     if(game.inplay){
         player.cool--; // player cooldown move speed
